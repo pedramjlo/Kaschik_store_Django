@@ -1,5 +1,6 @@
 from rest_framework.views import APIView 
 from rest_framework.response import Response 
+from rest_framework.permissions import AllowAny
 from rest_framework import status 
 from django.contrib.auth import get_user_model 
 
@@ -7,10 +8,20 @@ from .serializers import LoginSerializer, RegisterSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
 
 
+User = get_user_model()
+
+
 class AuthView(APIView):
-    def post(self, request, *args, **kwargs):
-        if 'login' in request.path:
-            pass
+    permission_classes = [AllowAny,]
+
+    def get_queryset(self):
+        return User.objects.all() 
+
+    def post(self, request, *args, **kwargs): 
+        if 'login' in request.path: 
+            return self.login(request) 
+        elif 'register' in request.path: 
+            return self.register(request)
 
 
     def login(self, request):
