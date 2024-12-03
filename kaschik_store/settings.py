@@ -30,6 +30,7 @@ INSTALLED_APPS = [
 
     'rest_framework', 
     'rest_framework_simplejwt', 
+    'rest_framework.authtoken',
     'dj_rest_auth', 
     'allauth', 
     'allauth.account', 
@@ -47,6 +48,8 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+
+     "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "kaschik_store.urls"
@@ -145,7 +148,8 @@ REST_FRAMEWORK = {
 AUTHENTICATION_BACKENDS = ( 
     'django.contrib.auth.backends.ModelBackend', 
     'allauth.account.auth_backends.AuthenticationBackend',
-    ) 
+)
+
 SITE_ID = 1 # Email verification 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
 ACCOUNT_EMAIL_REQUIRED = True
