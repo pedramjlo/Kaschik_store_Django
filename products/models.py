@@ -33,11 +33,13 @@ class ClotheSize(models.Model):
     def __str__(self):
         return str(self.size)
 
+
 class Hue(models.Model):
     hue = models.CharField(max_length=7, null=True, blank=True)
 
     def __str__(self):
         return self.hue if self.hue else 'No Hue'
+
 
 class Product(models.Model):
     class GenderChoice(models.TextChoices):
