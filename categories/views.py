@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from .serializers import MenCategoriesSerializer, WomenCategoriesSerializer
+from .serializers import CategorySerializer
 from .models import Category
 
 from rest_framework.views import APIView 
@@ -15,9 +15,19 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
+class AllCategoriesView(ListAPIView):
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny,]
+
+    def get_queryset(self):
+        categories = Category.objects.all()
+        return categories
+
+
 
 class WomenCategoriesView(ListAPIView):
-    serializer_class = WomenCategoriesSerializer
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny,]
 
     def get_queryset(self):
         categories = Category.objects.filter(type="female")
@@ -25,9 +35,12 @@ class WomenCategoriesView(ListAPIView):
 
         
 class MenCategoriesView(ListAPIView):
-    serializer_class = MenCategoriesSerializer
+    serializer_class = CategorySerializer
+    permission_classes = [AllowAny,]
 
     def get_queryset(self):
         categories = Category.objects.filter(type="male")
         return categories
+    
+
 
