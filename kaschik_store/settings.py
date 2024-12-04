@@ -1,3 +1,4 @@
+import os
 from decouple import config
 from pathlib import Path
 from datetime import timedelta
@@ -37,9 +38,12 @@ INSTALLED_APPS = [
     'allauth.socialaccount', 
     'dj_rest_auth.registration',
 
+    'webp_converter',
+
     "user_account",
     "categories",
     "products",
+    "avatars",
 ]
 
 MIDDLEWARE = [
@@ -67,6 +71,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'webp_converter.context_processors.webp_support',
             ],
         },
     },
@@ -155,3 +160,12 @@ AUTHENTICATION_BACKENDS = (
 SITE_ID = 1 # Email verification 
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
 ACCOUNT_EMAIL_REQUIRED = True
+
+
+
+
+
+
+# Media files settings
+MEDIA_URL = '/media/'  # URL to access media files in the browser
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to store media files on the server
