@@ -17,9 +17,9 @@ class ShoppingCart(models.Model):
 
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=5, validators=[MinValueValidator(0)])
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
     address = models.TextField()
-    status = models.CharField(max_length=9, choices=CartStatusChoice.choices, default='active')
+    status = models.CharField(max_length=9, choices=CartStatusChoice.choices, default=CartStatusChoice.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def update_total_price(self):
