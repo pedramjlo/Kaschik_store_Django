@@ -120,16 +120,7 @@ class CoupleCollectionView(ListAPIView):
 
 
 
-class AllCategoriesView(ListAPIView):
-    serializer_class = ProductSerializer
-    queryset = Product.objects.all()
-    permission_classes = [AllowAny,]
-    
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not queryset.exists():
-            raise NotFound(detail="No categories were found")
-        return queryset
+
 
 
 
