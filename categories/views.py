@@ -7,7 +7,9 @@ from rest_framework.views import APIView
 from rest_framework.generics import ListAPIView 
 from rest_framework.response import Response 
 from rest_framework.permissions import AllowAny
+from rest_framework.exceptions import NotFound
 from rest_framework import status 
+
 from django.contrib.auth import get_user_model 
 
 
@@ -15,14 +17,16 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 
-class AllCategoriesView(ListAPIView):
+class AllCollectionsView(ListAPIView):
     serializer_class = CategorySerializer
+    queryset = Category.objects.all()
     permission_classes = [AllowAny,]
-
+    
     def get_queryset(self):
-        categories = Category.objects.all()
-        return categories
-
+        queryset = super().get_queryset()
+        if not queryset.exists():
+            raise NotFound(detail="No categories were found")
+        return queryset
 
 
 class WomenCategoriesView(ListAPIView):

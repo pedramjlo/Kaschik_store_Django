@@ -58,6 +58,7 @@ class Product(models.Model):
     discount_percentage = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)
     hue = models.OneToOneField(Hue, on_delete=models.PROTECT, null=True, blank=True)
+    for_couples = models.BooleanField(default=False)
     created_at = models.DateField(auto_now_add=True)
 
     def __str__(self):
@@ -77,8 +78,16 @@ class Product(models.Model):
         super().save(*args, **kwargs)
 
 
+
 class ShoeProduct(Product):
     sizes = models.ManyToManyField(ShoeSize, related_name='shoe_products')
 
+
+
 class ClotheProduct(Product):
     sizes = models.ManyToManyField(ClotheSize, related_name='clothe_products')
+
+
+class AccessoryProduct(Product):
+    sizes = models.ManyToManyField(ClotheSize, related_name='accessory_products')
+
