@@ -17,10 +17,11 @@ class ShoppingCart(models.Model):
 
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    total_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)])
+    total_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
     address = models.TextField()
     status = models.CharField(max_length=9, choices=CartStatusChoice.choices, default=CartStatusChoice.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
+
 
     def update_total_price(self):
         total = sum(item.get_total_price() for item in self.cart_items.all())
@@ -32,7 +33,7 @@ class ShoppingCart(models.Model):
 class ShoppingCartItem(models.Model):  
     cart = models.ForeignKey(ShoppingCart, related_name='cart_items', on_delete=models.CASCADE, db_index=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)])
+    quantity = models.PositiveIntegerField(validators=[MinValueValidator(0)], default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):

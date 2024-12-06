@@ -1,7 +1,12 @@
 from django.db import models
 from django.utils import timezone
+
 from categories.models import Category
 from avatars.models import Avatar
+
+from django.core.validators import MinValueValidator
+
+
 
 class ShoeSize(models.Model):
     class ShoeSizeChoices(models.IntegerChoices):
@@ -54,6 +59,7 @@ class Product(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True)
     gender = models.CharField(max_length=7, choices=GenderChoice.choices, null=True)
     is_available = models.BooleanField(default=True)
+    available_quantity = models.IntegerField(validators=[MinValueValidator(0)], default=0)
     on_discount = models.BooleanField(default=False)
     discount_percentage = models.DecimalField(max_digits=10, decimal_places=1, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT)

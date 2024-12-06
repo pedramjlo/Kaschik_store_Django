@@ -4,6 +4,10 @@ from django.shortcuts import render
 from .serializers import ProductSerializer
 from .models import Product, ShoeProduct, ClotheProduct, AccessoryProduct
 
+from shopping_cart.utility import ShoppingCartMechanism
+from shopping_cart.serializers import ShoppingCartItemSerializer
+
+
 from rest_framework import status 
 from rest_framework.views import APIView 
 from rest_framework.generics import ListAPIView 
@@ -25,47 +29,46 @@ class ShoesPagination(PageNumberPagination):
     page_size = 10
 
 
-class MenShoesView(ListAPIView):
-    serializer_class = ProductSerializer
-    queryset = ShoeProduct.objects.filter(gender='male', is_available=True)
-    permission_classes = [AllowAny,]
-    pagination_class = ShoesPagination
+
+class MenShoesView(APIView): 
+    serializer_class = ProductSerializer 
+    permission_classes = [AllowAny] 
+    pagination_class = ShoesPagination 
     
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not queryset.exists():
-            raise NotFound(detail="No men shoes product was found")
-        return queryset
-
-
-class WomenShoesView(ListAPIView):
-    serializer_class = ProductSerializer
-    queryset = ShoeProduct.objects.filter(gender='female', is_available=True)
-    permission_classes = [AllowAny,]
-    pagination_class = ShoesPagination
+    def get_queryset(self): 
+        queryset = ShoeProduct.objects.filter(gender='male', is_available=True) 
+        if not queryset.exists(): 
+            raise NotFound(detail="No men shoes product was found") 
+        return queryset 
     
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not queryset.exists():
-            raise NotFound(detail="No women shoes product was found")
-        return queryset
+    def get(self, request, *args, **kwargs): 
+        queryset = self.get_queryset() 
+        page = self.paginate_queryset(queryset) 
+        
+        if page is not None: 
+            serializer = self.get_paginated_response(self.serializer_class(page, many=True).data) 
+        else: 
+            serializer = self.serializer_class(queryset, many=True) 
+        return Response(serializer.data) 
     
-
-
-
-class MenSuitsView(ListAPIView):
-    serializer_class = ProductSerializer
-    queryset = ClotheProduct.objects.filter(gender='male', is_available=True)
-    permission_classes = [AllowAny,]
-    pagination_class = ShoesPagination
+    def post(self, request, *args, **kwargs): 
+        if 'add_to_cart' in request.data: 
+            cart_mechanism = ShoppingCartMechanism(request.user) 
+            cart_item = cart_mechanism.add_to_cart(request.data['product_id']) 
+            return Response({'status': 'item added to cart', 'cart_item': ShoppingCartItemSerializer(cart_item).data}, status=status.HTTP_200_OK) 
+        return Response({'error': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST) 
     
-    def get_queryset(self):
-        queryset = super().get_queryset()
-        if not queryset.exists():
-            raise NotFound(detail="No men suits product was found")
-        return queryset
+    def delete(self, request, *args, **kwargs): 
+        if 'remove_from_cart' in request.data: 
+            cart_mechanism = ShoppingCartMechanism(request.user) 
+            cart_item = cart_mechanism.remove_from_cart(request.data['product_id']) 
+            return Response({'status': 'item removed from cart', 'cart_item': ShoppingCartItemSerializer(cart_item).data}, status=status.HTTP_200_OK) 
+        if 'clear_cart' in request.data: 
+            cart_mechanism = ShoppingCartMechanism(request.user) 
+            cart_items = cart_mechanism.clear_cart() 
+            return Response({'status': 'cart cleared', 'cart_items': []}, status=status.HTTP_200_OK) 
+        return Response({'error': 'Invalid request'}, status=status.HTTP_400_BAD_REQUEST)
     
-
 
 class WomenDressesView(ListAPIView):
     serializer_class = ProductSerializer
@@ -78,6 +81,44 @@ class WomenDressesView(ListAPIView):
         if not queryset.exists():
             raise NotFound(detail="No women dresses product was found")
         return queryset
+    
+
+class MenSuitsView(ListAPIView):
+    serializer_class = ProductSerializer
+    queryset = ClotheProduct.objects.filter(gender='male', is_available=True)
+    permission_classes = [AllowAny,]
+    pagination_class = ShoesPagination
+    
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        if not queryset.exists():
+            raise NotFound(detail="No men suits product was found")
+        return queryset
+
+
+
+class WomenShoesView(APIView): 
+    serializer_class = ProductSerializer 
+    permission_classes = [AllowAny] 
+    pagination_class = ShoesPagination 
+    
+    def get_queryset(self): 
+        queryset = ShoeProduct.objects.filter(gender='female', is_available=True) 
+        if not queryset.exists(): 
+            raise NotFound(detail="No men shoes product was found") 
+        return queryset 
+    
+    def get(self, request, *args, **kwargs): 
+        queryset = self.get_queryset() 
+        page = self.paginate_queryset(queryset) 
+        
+        if page is not None: 
+            serializer = self.get_paginated_response(self.serializer_class(page, many=True).data) 
+        else: 
+            serializer = self.serializer_class(queryset, many=True) 
+        return Response(serializer.data) 
+   
+
 
 
 class MenAccessoriesView(ListAPIView):

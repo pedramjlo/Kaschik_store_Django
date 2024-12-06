@@ -16,11 +16,21 @@ class ShoppingCartMechanism:
 
     def add_to_cart(self, product_id):
         product = get_object_or_404(Product, id=product_id, is_available=True)
-        cart_item, created = ShoppingCartItem.objects.get_or_create(cart=self.cart, product=product)
-        cart_item.quantity += 1
-        cart_item.save()
-        self.cart.update_total_price()
-        return cart_item
+        if product.available_quantity > 0:
+            cart_item, created = ShoppingCartItem.objects.get_or_create(cart=self.cart, product=product)
+            if product.available_quantity > cart_item.quantity:
+                cart_item.quantity += 1
+                cart_item.save()
+                product.available_quantity -= 1
+                product.save()
+                self.cart.update_total_price()
+                return cart_item
+            else:
+                raise ValueError("There are no more of this product avilable")
+        else:
+            raise ValueError("Product is out of stock")
+        
+        
 
 
     def remove_from_cart(self, product_id):
@@ -31,14 +41,19 @@ class ShoppingCartMechanism:
             cart_item.save()
         else:
             cart_item.delete()
+        
+        product.available_quantity += 1
+        product.save()
         self.cart.update_total_price()
         return cart_item
 
 
-    def clear_cart(self):
-        cart_items = ShoppingCartItem.objects.filter(cart=self.cart)
-        for item in cart_items:
-            item.delete()
-        self.cart.update_total_price()
+    def clear_cart(self): 
+        cart_items = ShoppingCartItem.objects.filter(cart=self.cart) 
+        for item in cart_items: 
+            item.product.available_quantity += item.quantity 
+            item.product.save() 
+            item.delete() 
+        self.cart.update_total_price() 
         return cart_items
     
