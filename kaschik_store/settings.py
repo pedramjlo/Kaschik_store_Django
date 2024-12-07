@@ -39,12 +39,15 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
 
     'webp_converter',
+    'iranian_cities',
 
     "user_account",
     "categories",
     "products",
     "avatars",
     "shopping_cart",
+    "membership_club",
+    "shipping",
 ]
 
 MIDDLEWARE = [
@@ -168,9 +171,14 @@ ACCOUNT_EMAIL_REQUIRED = True
 
 
 
-
-
-
 # Media files settings
 MEDIA_URL = '/media/'  # URL to access media files in the browser
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  # Path to store media files on the server
+
+
+
+
+IRANIAN_CITIES_ADMIN_ADD_READONLY_ENABLED = True
+IRANIAN_CITIES_ADMIN_DELETE_READONLY_ENABLED = True
+IRANIAN_CITIES_ADMIN_CHANGE_READONLY_ENABLED = True
+IRANIAN_CITIES_ADMIN_INLINE_ENABLED = False

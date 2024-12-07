@@ -2,6 +2,8 @@ from django.core.exceptions import ValidationError
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractUser, PermissionsMixin
 
+from membership_club.models import MembershipClub
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -38,6 +40,8 @@ class CustomUser(AbstractUser, PermissionsMixin):
     nationality = models.CharField(max_length=9, choices=NationalityChoice.choices, null=False, blank=False)
     national_id_number = models.PositiveBigIntegerField(null=True, blank=True)
     passport_number = models.CharField(max_length=9, null=True, blank=True)
+    membership = models.OneToOneField(MembershipClub, on_delete=models.CASCADE, null=True)
+    
 
     objects = CustomUserManager() 
     

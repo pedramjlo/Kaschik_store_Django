@@ -1,9 +1,10 @@
 from django.db import models
 from django.core.validators import MinValueValidator
-
+from iranian_cities.fields import ProvinceField, CityField
 from django.contrib.auth import get_user_model 
 
 from products.models import Product
+
 
 
 User = get_user_model()
@@ -18,7 +19,9 @@ class ShoppingCart(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     total_price = models.DecimalField(max_digits=10, decimal_places=2, validators=[MinValueValidator(0)], null=True, blank=True)
-    address = models.TextField()
+    customer_province = ProvinceField(null=True)
+    customer_city = CityField(null=True)
+    customer_address = models.TextField(null=True)
     status = models.CharField(max_length=9, choices=CartStatusChoice.choices, default=CartStatusChoice.ACTIVE)
     created_at = models.DateTimeField(auto_now_add=True)
 

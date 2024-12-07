@@ -23,7 +23,6 @@ class AuthView(APIView):
         elif 'register' in request.path: 
             return self.register(request)
 
-
     def login(self, request):
         serializer = LoginSerializer(data=request.data)
         if serializer.is_valid():
