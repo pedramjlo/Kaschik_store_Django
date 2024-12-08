@@ -3,7 +3,7 @@ from rest_framework import serializers
 from .models import ShoppingCart, ShoppingCartItem
 
 
-class ShoppingCart(serializers.ModelSerializer):
+class ShoppingCartSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShoppingCart
         fields = '__all__'

@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "membership_club",
     "shipping",
     "receipt",
+    "home_page_display",
 ]
 
 MIDDLEWARE = [
