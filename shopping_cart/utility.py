@@ -6,6 +6,7 @@ from .models import ShoppingCart, ShoppingCartItem
 from products.models import Product
 
 class ShoppingCartMechanism:
+
     def __init__(self, user, status='active'):
         self.user = user
         self.cart, created = ShoppingCart.objects.get_or_create(user=user, status=status)
@@ -22,6 +23,7 @@ class ShoppingCartMechanism:
             if time_since_last_login > timedelta(hours=72):
                 self.cart.status = 'abandoned'
                 self.cart.save()
+
 
     def add_to_cart(self, product_id):
         product = get_object_or_404(Product, id=product_id, is_available=True)
@@ -40,6 +42,7 @@ class ShoppingCartMechanism:
         else:
             raise ValueError("Product is out of stock")
 
+
     def remove_from_cart(self, product_id):
         product = get_object_or_404(Product, id=product_id)
         cart_item = get_object_or_404(ShoppingCartItem, product=product, cart=self.cart)
@@ -48,11 +51,13 @@ class ShoppingCartMechanism:
             cart_item.save()
         else:
             cart_item.delete()
+            self.update_cart_status()
         
         product.available_quantity += 1
         product.save()
         self.cart.update_total_price()
         return cart_item
+
 
     def clear_cart(self):
         cart_items = ShoppingCartItem.objects.filter(cart=self.cart)
@@ -60,5 +65,6 @@ class ShoppingCartMechanism:
             item.product.available_quantity += item.quantity
             item.product.save()
             item.delete()
+        self.update_cart_status()
         self.cart.update_total_price()
         return cart_items
