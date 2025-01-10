@@ -14,3 +14,15 @@ Kaschik is an e-commerce backend web application made with Django v5.0.
  
 # Authentication/Authorization
 Allauth is used to handle user creation as well as SimpleJWT to support token based authorization.
+
+
+# Django Apps
+As a display of loyalty to the principal of sepation of concerns, the features of the application are separated into single resposible apps.
+ - user_account: handles user authentication/creation.
+ - products: hold data of each and every product object.
+ - category: respectively, handles data related to Product objects' category
+ - avatars: converts image files' formats to .webp and handles products' image attribute
+ - home_page_display: single independent app just to display the home page screen
+ - membership_club: manages roles aka types of membership
+ - shopping cart: shopping cart actions; adding/removing items and hold data of selected items
+ - receipt: applies discounts and calculates the final order + shipping fees
