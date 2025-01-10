@@ -12,5 +12,5 @@ Kaschik is a backend project made by Django web framework.
   - silver: 12% discount on order fees.
   - VIP: 18% discount on order fees + free shipping.
  
-# Authentication
-Allauth is used to handle user creation as well as SimpleJWT to support token based authorisation.
+# Authentication/Authorization
+Allauth is used to handle user creation as well as SimpleJWT to support token based authorization.
