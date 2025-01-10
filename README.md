@@ -1,6 +1,6 @@
 # Introduction 
 
-Kaschik is a backend project made by Django web framework.
+Kaschik is an e-commerce backend web application made with Django v5.0.
 
 # Features
 
