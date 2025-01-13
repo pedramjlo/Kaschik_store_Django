@@ -26,3 +26,7 @@ As a display of loyalty to the principal of sepation of concerns, the features o
  - membership_club: manages roles aka types of membership
  - shopping cart: shopping cart actions; adding/removing items and hold data of selected items
  - receipt: applies discounts and calculates the final order + shipping fees
+
+
+# The interface
+The [frontend][https://pages.github.com/](https://github.com/pedramjlo/kaschik_store_reactjs) written with ReactJS
