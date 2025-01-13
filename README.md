@@ -29,4 +29,4 @@ As a display of loyalty to the principal of sepation of concerns, the features o
 
 
 # The interface
-The [frontend][https://pages.github.com/](https://github.com/pedramjlo/kaschik_store_reactjs) written with ReactJS
+The [frontend]([https://pages.github.com/](https://github.com/pedramjlo/kaschik_store_reactjs)) written with ReactJS
