@@ -18,14 +18,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    'rest_framework', 
-    'rest_framework_simplejwt', 
-    'rest_framework.authtoken',
-    'dj_rest_auth', 
-    'allauth', 
-    'allauth.account', 
-    'allauth.socialaccount', 
-    'dj_rest_auth.registration',
+    
     
     
     'corsheaders',
@@ -53,7 +46,6 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     'corsheaders.middleware.CorsMiddleware',
-    "allauth.account.middleware.AccountMiddleware",
 ]
 
 
@@ -62,7 +54,7 @@ ROOT_URLCONF = "kaschik_store.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -118,24 +110,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 AUTH_USER_MODEL = "user_account.CustomUser"
 
-SIMPLE_JWT = { 
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5), 
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1), 
-}
 
-REST_FRAMEWORK = {
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ],
-    'DEFAULT_PAGINATION_CLASS': 
-    'rest_framework.pagination.PageNumberPagination', 
-    'PAGE_SIZE': 10,
-}
 
-AUTHENTICATION_BACKENDS = ( 
-    'django.contrib.auth.backends.ModelBackend', 
-    'allauth.account.auth_backends.AuthenticationBackend',
-)
+
 
 SITE_ID = 1
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory' 
@@ -145,6 +122,4 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
-CORS_ALLOWED_ORIGINS = [ 
-    "http://localhost:3000", 
-]
+
